@@ -10,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -41,8 +42,8 @@ public class TaskListWS {
     // get single task by id
     @GET
     @Produces(MediaType.APPLICATION_FORM_URLENCODED)
-    @Path("get")
-    public Response getTask(@FormParam("ID") int ID) throws Exception{
+    @Path("get/{ID}")
+    public Response getTask(@PathParam("ID") int ID) throws Exception{
         Task t = new Task();
         t.setID(ID);
         
