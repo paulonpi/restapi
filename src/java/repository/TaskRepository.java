@@ -85,9 +85,13 @@ public class TaskRepository {
         return false;
     }
     
-    public List<Task> list() throws SQLException, Exception
+    public List<Task> list(String desc) throws SQLException, Exception
     {
         String sql = "SELECT * FROM task WHERE status NOT LIKE 'deleted'";
+        
+        if(!desc.contains("*"))
+            sql += " AND description LIKE '%" + desc + "%'";
+        
         List<Task> taskList = new ArrayList<>();
         
         PreparedStatement pst = MySqlConnection.getPreparedStatement(sql, new String[]{"ID"});

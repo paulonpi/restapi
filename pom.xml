@@ -15,13 +15,12 @@
   </parent>
   <name>app-tasklist</name>
 
+  <packaging>war</packaging>
+
   <properties>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <webjars-bootstrap.version>4.1.0</webjars-bootstrap.version>
-    <webjars-jquery-ui.version>1.12.1</webjars-jquery-ui.version>
-    <webjars-jquery.version>3.3.1-1</webjars-jquery.version>
   </properties>
 
   <dependencies>
@@ -57,21 +56,6 @@
       <artifactId>HikariCP</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>jquery</artifactId>
-      <version>${webjars-jquery.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>jquery-ui</artifactId>
-      <version>${webjars-jquery-ui.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>bootstrap</artifactId>
-      <version>${webjars-bootstrap.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
@@ -79,27 +63,31 @@
   </dependencies>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <executions>
+  <plugins>
+    <plugin>
+      <groupId>com.heroku.sdk</groupId>
+      <artifactId>heroku-maven-plugin</artifactId>
+      <configuration>
+        <appName>${heroku.appName}</appName>
+      </configuration>
+    </plugin>
+
+    <plugin>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-maven-plugin</artifactId>
+      <version>${spring.version}</version>
+      <configuration>
+          <finalName>${project.name}</finalName>
+      </configuration>
+      <executions>
           <execution>
-            <goals>
-              <goal>build-info</goal>
-            </goals>
-            <configuration>
-              <additionalProperties>
-                <encoding.source>${project.build.sourceEncoding}</encoding.source>
-                <encoding.reporting>${project.reporting.outputEncoding}</encoding.reporting>
-                <java.source>${maven.compiler.source}</java.source>
-                <java.target>${maven.compiler.target}</java.target>
-              </additionalProperties>
-            </configuration>
+              <goals>
+                  <goal>repackage</goal>
+              </goals>
           </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+      </executions>
+  </plugin>
+  </plugins>
+</build>
 
 </project>

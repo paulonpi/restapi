@@ -29,19 +29,12 @@ public class TaskListWS {
 
     @Context
     private UriInfo context;
-
+    
     public TaskListWS() {}
     
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
-        Gson g = new Gson();
-        return g.toJson("Test WS RESTFULL");
-    }
-
     // get single task by id
     @GET
-    @Produces(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("get/{ID}")
     public Response getTask(@PathParam("ID") int ID) throws Exception{
         Task t = new Task();
@@ -57,31 +50,29 @@ public class TaskListWS {
         
         Gson g = new Gson();
         
-        return Response.status(200)
-            .entity(g.toJson(t))
-                .build();
+        return Response.ok(g.toJson(t))
+                .header("Access-Control-Allow-Origin", "*").build();
     }
     
     //get list of tasks
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("list")
-    public Response listTaks() throws Exception
+    @Path("list/{desc}")
+    public Response listTaks(@PathParam("desc") String desc) throws Exception
     {
         List<Task> taskList = null;
         TaskRepository taskRepo = new TaskRepository();
         
         try {
-            taskList = taskRepo.list();
+            taskList = taskRepo.list(desc);
         } catch (SQLException ex) {
             return Response.status(500).entity(ex.toString()).build();
         }
         
         Gson g = new Gson();
         
-        return Response.status(200)
-            .entity(g.toJson(taskList))
-                .build();
+        return Response.ok(g.toJson(taskList))
+                .header("Access-Control-Allow-Origin", "*").build();
     }
 
     //update task
@@ -108,9 +99,8 @@ public class TaskListWS {
 
         Gson g = new Gson();
         
-        return Response.status(200)
-            .entity(g.toJson(task))
-                .build();
+        return Response.ok(g.toJson(task))
+                .header("Access-Control-Allow-Origin", "*").build();
     }
     
     @POST
@@ -131,8 +121,8 @@ public class TaskListWS {
                 task.setCreatAt(new Timestamp(System.currentTimeMillis()));
                 
                 Gson g = new Gson();
-                return Response.status(200)
-                    .entity(g.toJson(task))
+                return Response.ok(g.toJson(task))
+                        .header("Access-Control-Allow-Origin", "*")
                         .build();
             }
             
